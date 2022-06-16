@@ -40,4 +40,18 @@ public class DatabaseHelper {
         }
         catch(Exception e){}
     }
+
+    public static void clearAll(){
+        //remove all sample data
+        try {
+            Connection cnn = DriverManager.getConnection(dbUrl, dbUser, dbPwd);
+            Statement dbCommand = cnn.createStatement();
+            dbCommand.execute("delete from auth_codes;");
+            dbCommand.execute("delete from card_transactions;");
+            dbCommand.execute("delete from cards;");
+            dbCommand.execute("delete from users;");
+        }
+        catch(Exception e){}
+    }
+
 }

@@ -14,6 +14,11 @@ import static com.codeborne.selenide.Selenide.*;
 
 public class LoginTest {
 
+    @AfterAll
+    public static void cleanUp(){
+        DatabaseHelper.clearAll();
+    }
+
     @Test
     @DisplayName("Should attempt invalid login,using correct user name and wrong password. Expecting error popup.")
     public void shouldInvalidLoginGoodNameBadPwd() {

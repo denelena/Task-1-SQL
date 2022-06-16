@@ -14,26 +14,25 @@ public class LoginPage {
     private SelenideElement loginButton =$("[data-test-id=action-login]");
 
     public VerificationPage validLogin(UserInfo li) {
-        loginField.setValue(li.getLogin());
-        passwordField.setValue(li.getPassword());
-        loginButton.click();
-
+        doFillAndClick(li.getLogin(), li.getPassword());
         return new VerificationPage();
     }
 
     public void invalidLogin(UserInfo li) {
-        loginField.setValue(li.getLogin());
-        passwordField.setValue(li.getPassword());
-        loginButton.click();
+        doFillAndClick(li.getLogin(), li.getPassword());
 
         //expect error popup
-        SelenideElement errHeaderField = $("[data-test-id='error-notification'] .notification__title");
-        errHeaderField.shouldBe(visible);
-        errHeaderField.shouldHave(text("Ошибка"));
-
-        SelenideElement errContentField = $("[data-test-id='error-notification'] .notification__content");
-        errContentField.shouldBe(visible);
-        errContentField.shouldHave(text("Неверно указан логин или пароль"));
+        PagesHelper.waitElementVisible("[data-test-id='error-notification'] .notification__title", "Ошибка");
+        PagesHelper.waitElementVisible("[data-test-id='error-notification'] .notification__content", "Неверно указан логин или пароль");
     }
+
+    private void doFillAndClick(String login, String pwd){
+        loginField.setValue(login);
+        passwordField.setValue(pwd);
+        loginButton.click();
+    }
+
+
+
 
 }

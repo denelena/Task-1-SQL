@@ -16,43 +16,31 @@ public class VerificationPage {
         codeField.shouldBe(visible);
     }
 
-    public void validVerify(int smsCode) {
-        codeField.setValue(Integer.toString(smsCode));
-        verifyButton.click();
-
-        //expect Dashboard page
-        SelenideElement headerField = $("[data-test-id='dashboard']");
-        headerField.shouldBe(visible);
-        headerField.shouldHave(Condition.text("Личный кабинет"));
+    public DashboardPage validVerify(int smsCode) {
+        doFillAndClick(smsCode);
+        return new DashboardPage();
     }
 
     public void invalidVerify(int smsCode) {
-        codeField.setValue(Integer.toString(smsCode));
-        verifyButton.click();
+        doFillAndClick(smsCode);
 
         //expect error popup
-        SelenideElement errHeaderField = $("[data-test-id='error-notification'] .notification__title");
-        errHeaderField.shouldBe(visible);
-        errHeaderField.shouldHave(text("Ошибка"));
-
-        SelenideElement errContentField = $("[data-test-id='error-notification'] .notification__content");
-        errContentField.shouldBe(visible);
-        errContentField.shouldHave(text("Неверно указан код! Попробуйте ещё раз."));
+        PagesHelper.waitElementVisible("[data-test-id='error-notification'] .notification__title", "Ошибка");
+        PagesHelper.waitElementVisible("[data-test-id='error-notification'] .notification__content", "Неверно указан код! Попробуйте ещё раз.");
     }
 
     public LoginPage invalidVerifyTooManyBadAttempts(int smsCode) {
-        codeField.setValue(Integer.toString(smsCode));
-        verifyButton.click();
+        doFillAndClick(smsCode);
 
         //expect error popup
-        SelenideElement errHeaderField = $("[data-test-id='error-notification'] .notification__title");
-        errHeaderField.shouldBe(visible);
-        errHeaderField.shouldHave(text("Ошибка"));
-
-        SelenideElement errContentField = $("[data-test-id='error-notification'] .notification__content");
-        errContentField.shouldBe(visible);
-        errContentField.shouldHave(text("Превышено количество попыток"));
+        PagesHelper.waitElementVisible("[data-test-id='error-notification'] .notification__title", "Ошибка");
+        PagesHelper.waitElementVisible("[data-test-id='error-notification'] .notification__content", "Превышено количество попыток");
 
         return new LoginPage();
+    }
+
+    private void doFillAndClick(int smsCode){
+        codeField.setValue(Integer.toString(smsCode));
+        verifyButton.click();
     }
 }
